@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:">
+  <title>Sticks</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="notes"></div>
+  <canvas id="stage"></canvas>
+  <div id="bin-ui" title="Drag to move the bin">
+    <div class="bin-pill">
+      <span class="bin-count"></span>
+      <button data-act="restore" title="Take the last note back out">Restore</button>
+      <button data-act="empty" title="Empty the bin">Empty</button>
+    </div>
+  </div>
+  <script src="../../node_modules/matter-js/build/matter.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

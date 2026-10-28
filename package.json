@@ -1,0 +1,53 @@
+{
+  "name": "sticks",
+  "version": "1.1.0",
+  "description": "Realistic sticky notes for the Windows desktop: peel them, crumple them, throw them in the bin.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "set ELECTRON_RUN_AS_NODE=&& electron .",
+    "log": "set ELECTRON_RUN_AS_NODE=&& set STICKS_LOG=1&& electron .",
+    "dev": "set ELECTRON_RUN_AS_NODE=&& set STICKS_DEBUG=1&& electron .",
+    "test:ui": "node scripts/run-ui-test.js",
+    "icon": "set ELECTRON_RUN_AS_NODE=&& electron scripts/make-icon.js",
+    "dist": "npm run icon && electron-builder --win"
+  },
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^45.1.0",
+    "electron-builder": "^26.18.0"
+  },
+  "dependencies": {
+    "koffi": "3.3.3",
+    "matter-js": "^0.20.0",
+    "three": "^0.186.1"
+  },
+  "build": {
+    "appId": "com.sticks.app",
+    "productName": "Sticks",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": false
+    },
+    "asarUnpack": [
+      "node_modules/@koromix/koffi-*/**"
+    ]
+  }
+}
