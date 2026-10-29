@@ -9,7 +9,8 @@
     "dev": "set ELECTRON_RUN_AS_NODE=&& set STICKS_DEBUG=1&& electron .",
     "test:ui": "node scripts/run-ui-test.js",
     "icon": "set ELECTRON_RUN_AS_NODE=&& electron scripts/make-icon.js",
-    "dist": "npm run icon && electron-builder --win"
+    "dist": "npm run icon && electron-builder --win",
+    "dist:mac": "npm run icon && electron-builder --mac"
   },
   "author": "",
   "license": "MIT",
@@ -40,6 +41,33 @@
         "portable"
       ],
       "icon": "build/icon.png"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.productivity",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "extendInfo": {
+        "LSUIElement": true
+      },
+      "files": [
+        "!node_modules/koffi/**",
+        "!node_modules/@koromix/**"
+      ]
     },
     "nsis": {
       "oneClick": true,

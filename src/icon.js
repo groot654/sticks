@@ -2,7 +2,7 @@ const { nativeImage } = require('electron');
 
 // Draws a small yellow sticky note with a curled corner straight into a BGRA bitmap,
 // so the app needs no binary icon assets.
-function createNoteIcon(size) {
+function createNoteIcon(size, scaleFactor = 1) {
   const buf = Buffer.alloc(size * size * 4);
   const pad = Math.round(size * 0.09);
   const fold = Math.round(size * 0.3);
@@ -34,7 +34,7 @@ function createNoteIcon(size) {
       put(x, y, ruled ? [196, 160, 40, 255] : [255, 236 - shade, 112 - shade, 255]);
     }
   }
-  return nativeImage.createFromBitmap(buf, { width: size, height: size });
+  return nativeImage.createFromBitmap(buf, { width: size, height: size, scaleFactor });
 }
 
 module.exports = { createNoteIcon };

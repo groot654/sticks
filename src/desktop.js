@@ -27,6 +27,7 @@ function hwndOf(win) {
   return buf.length >= 8 ? Number(buf.readBigUInt64LE(0)) : buf.readUInt32LE(0);
 }
 
+// Elsewhere (macOS) the overlay is an ordinary window: other apps cover it once they're clicked.
 const supported = process.platform === 'win32';
 
 /** Puts the window on the desktop layer. Returns false if that isn't possible here. */

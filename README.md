@@ -35,7 +35,20 @@ npm run test:ui    # scripted end-to-end run: peel, hold, crumple, throw, toss, 
 npm run dist       # dist/Sticks Setup 1.0.0.exe (installer) and dist/Sticks 1.0.0.exe (portable)
 ```
 
-Notes are saved to `%APPDATA%\sticks\sticks.json`.
+Notes are saved to `%APPDATA%\sticks\sticks.json` (macOS: `~/Library/Application Support/sticks/sticks.json`).
+
+## macOS
+
+The Mac app has to be built on a Mac. Without one, use GitHub Actions: **Actions → Build macOS app → Run workflow** (or push a `v*` tag, which also attaches the files to a release). Download the `Sticks-mac` artifact. It holds a `.dmg` and a `.zip`, both universal (Intel and Apple Silicon). On a Mac you can instead run `npm run dist:mac`.
+
+On the Mac, Sticks lives in the menu bar (no Dock icon). The shortcuts are Ctrl+Option+N / Ctrl+Option+H. "Notes on the desktop" keeps them in a normal window layer: other apps cover the notes once you click them.
+
+The app is not notarized by Apple, so macOS blocks it the first time it opens. To open it:
+
+1. Drag Sticks to Applications and open it. When macOS says it can't be opened, click **Done**.
+2. Go to **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to Sticks.
+
+If macOS says the app is "damaged", run `xattr -cr /Applications/Sticks.app` in Terminal and open it again.
 
 ## How it works
 
@@ -51,4 +64,4 @@ Notes are saved to `%APPDATA%\sticks\sticks.json`.
 
 - Primary monitor only.
 - By default notes live on the desktop: behind every app, like a desktop widget (the desktop window owns the overlay, the trick Rainmeter's "On desktop" uses, via [koffi](https://koffi.dev)). Clicking a note brings it forward until you click another app. The tray can switch to "Notes always on top" instead.
-- The installer is unsigned, so SmartScreen will warn the first time it runs.
+- The installers are unsigned, so SmartScreen (Windows) and Gatekeeper (macOS) warn the first time they run. A signed, notarized Mac build needs an Apple Developer account.

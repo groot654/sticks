@@ -80,6 +80,8 @@ function createWindow() {
   });
 
   setIgnoreMouse(true);
+  // macOS: follow the user across Spaces, like a widget on the desktop
+  if (process.platform === 'darwin') win.setVisibleOnAllWorkspaces(true);
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
   win.once('ready-to-show', () => {
     win.showInactive();
@@ -138,7 +140,7 @@ function buildTrayMenu() {
     },
     { label: 'Sounds', type: 'checkbox', checked: s.sound, click: (item) => updateSettings({ sound: item.checked }) },
     {
-      label: 'Start with Windows', type: 'checkbox', checked: app.getLoginItemSettings(loginItemOptions()).openAtLogin,
+      label: process.platform === 'darwin' ? 'Open at login' : 'Start with Windows', type: 'checkbox', checked: app.getLoginItemSettings(loginItemOptions()).openAtLogin,
       click: (item) => app.setLoginItemSettings({ ...loginItemOptions(), openAtLogin: item.checked }),
     },
     { type: 'separator' },
@@ -166,8 +168,19 @@ function updateSettings(patch) {
   buildTrayMenu();
 }
 
+// macOS: a menu-bar app with no Dock icon. The menu is never shown, but it keeps Cmd+C/V/X/A/Z
+// working in notes and drops the default Cmd+W, which would close the overlay and quit.
+function setupMac() {
+  app.dock?.hide();
+  Menu.setApplicationMenu(Menu.buildFromTemplate([
+    { label: app.name, submenu: [{ role: 'quit', label: 'Quit Sticks' }] },
+    { role: 'editMenu' },
+  ]));
+}
+
 app.whenReady().then(() => {
   app.setAppUserModelId('com.sticks.app');
+  if (process.platform === 'darwin') setupMac();
   store = new Store(path.join(app.getPath('userData'), 'sticks.json'));
 
   ipcMain.handle('store:load', () => store.data);
@@ -176,9 +189,11 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  tray = new Tray(createNoteIcon(32));
+  // the macOS menu bar wants a 16pt icon; drawn at 32px for Retina
+  tray = new Tray(process.platform === 'darwin' ? createNoteIcon(32, 2) : createNoteIcon(32));
   tray.setToolTip('Sticks — sticky notes');
-  tray.on('click', () => tray.popUpContextMenu());
+  // macOS already opens the context menu on a click
+  if (process.platform !== 'darwin') tray.on('click', () => tray.popUpContextMenu());
   buildTrayMenu();
 
   globalShortcut.register('Control+Alt+N', showPad);

@@ -373,7 +373,7 @@ function undoStroke(entry) {
 window.addEventListener('keydown', (e) => {
   if (!drawingEntry) return;
   if (e.key === 'Escape') setDrawing(drawingEntry, false);
-  else if (e.key.toLowerCase() === 'z' && e.ctrlKey) {
+  else if (e.key.toLowerCase() === 'z' && (e.ctrlKey || e.metaKey)) {
     e.preventDefault();
     undoStroke(drawingEntry);
   }
